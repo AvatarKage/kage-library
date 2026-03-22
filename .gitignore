@@ -1,0 +1,27 @@
+# Folders
+.vscode
+node_modules
+dist
+logs
+databases
+backups
+ssl
+config
+src
+
+# Files
+notes.md
+scan-checkpoint.json
+package-lock.json
+nodemon.json
+server.ts
+tsconfig.json
+
+# Extensions
+*.env
+*.log
+*.db
+*.sqlite
+*.idea
+*.ini
+*.lnk
