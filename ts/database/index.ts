@@ -1,1 +1,0 @@
-export { connectDb } from "./src/connection.js";
