@@ -3,19 +3,19 @@
 node_modules
 dist
 logs
-databases
-backups
+data
 ssl
 config
-/src/
 
 # Files
-notes.md
 scan-checkpoint.json
 package-lock.json
 nodemon.json
 server.ts
 tsconfig.json
+changelog.diff
+notes.md
+todo.md
 
 # Extensions
 *.env
