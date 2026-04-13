@@ -5,7 +5,7 @@ dist
 logs
 data
 ssl
-config
+/config/
 
 # Files
 scan-checkpoint.json
