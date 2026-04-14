@@ -20,6 +20,7 @@
     "luxon": "^3.7.2",
     "node-cron": "^4.2.1",
     "path": "^0.12.7",
+    "robots-parser": "^3.0.1",
     "tldts": "^7.0.28",
     "toml": "^4.1.1",
     "translate": "^3.0.1"

@@ -144,5 +144,13 @@ export const icons = {
         "error": "",
         "debug": "",
         "trace": ""
+    },
+    "search": {
+        "info": "",
+        "success": "",
+        "warn": "",
+        "error": "",
+        "debug": "",
+        "trace": ""
     }
 };

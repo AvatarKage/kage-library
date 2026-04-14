@@ -10,7 +10,7 @@ import Database from "./typescript/classes/database.js";
 import Identifier from "./typescript/classes/identifier.js";
 import { log } from "./typescript/modules/logging/log.js";
 import toArray from "./typescript/helpers/toArray.js";
-import Metadata from "./typescript/classes/metadata.js";
+import WebClient from "./typescript/classes/webClient.js";
 import parseDuration from "./typescript/helpers/parseDuration.js";
 
 export const snowflake = new Snowflake(config.generation.epoch);
@@ -58,8 +58,9 @@ const shortlink = id.generate("SHORTLINK");
 log.id.success(shortlink);
 log.id.info(id.get(shortlink));
 
-const md = new Metadata(db.metadata);
-log.crawler.success(await md.get(url.href));
+const wc = new WebClient(db.metadata);
+log.crawler.success(await wc.getMetadata(url.href));
+log.crawler.success(await wc.callAPI("https://api.ipify.org?format=json"));
 
 // Better if in a cron
-log.crawler.success(md.clearCache(parseDuration("1d")));
+log.crawler.success(wc.clearCache(parseDuration("1d")));
