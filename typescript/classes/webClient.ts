@@ -285,6 +285,12 @@ export default class WebClient {
         }
     }
 
+    /**
+     * Check if crawler is blocked by robots.txt
+     *
+     * @param url - The target URL
+     * @returns boolean
+     */
     async isAllowed(url: string) {
         try {
             const parsedUrl = new URL(url);
