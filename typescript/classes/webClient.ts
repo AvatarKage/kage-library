@@ -285,7 +285,7 @@ export default class WebClient {
 
             return response.data;
         } catch (error: any) {
-            throw error;
+            return true;
         }
     }
 
