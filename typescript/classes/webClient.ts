@@ -250,7 +250,7 @@ export default class WebClient {
         options?: {
             method?: "GET" | "POST" | "PUT" | "DELETE";
             auth?: string;
-            format?: "json" | "text";
+            format?: "json" | "text" | "binary";
             data?: any;
             headers?: Record<string, string>;
         }
@@ -274,7 +274,12 @@ export default class WebClient {
                     ...(options?.headers || {})
                 },
                 data: options?.data,
-                responseType: options?.format === "text" ? "text" : "json",
+                responseType:
+                options?.format === "text"
+                    ? "text"
+                    : options?.format === "binary"
+                    ? "arraybuffer"
+                    : "json",
                 validateStatus: () => true
             });
 
