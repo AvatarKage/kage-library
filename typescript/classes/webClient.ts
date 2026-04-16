@@ -22,10 +22,10 @@ import { DB } from "../types/database.js";
  * const api = await wc.callAPI("https://api.example.com/data");
  */
 export default class WebClient {
-    private database: DB;
+    private database: DB | any;
 
-    constructor(database: DB) {
-        this.database = database;
+    constructor(database?: DB) {
+        this.database = database ?? null;
     }
 
     private getUserAgent() {
