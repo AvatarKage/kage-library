@@ -315,13 +315,18 @@ export default class WebClient {
                 return true;
             }
 
-            // @ts-ignore
-            const robots = robotsParser(robotsUrl, response.data);
-            const result = robots.isAllowed(url, config.crawler.name) ?? true;
+            if (response.data) {
+                // @ts-ignore
+                const robots = robotsParser(robotsUrl, response.data);
+                const result = robots.isAllowed(url, config.crawler.name) ?? true;
 
-            if (!result) log.crawler.warn(`${config.crawler.name} is not allowed to crawl ${url}`)
+                if (!result) log.crawler.warn(`${config.crawler.name} is not allowed to crawl ${url}`)
 
-            return result
+                return result
+            } else {
+                return true
+            }
+            
         } catch (error: any) {
             log.crawler.error(error?.code || error?.message);
             return true;
