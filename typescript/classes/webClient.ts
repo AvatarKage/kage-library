@@ -315,7 +315,7 @@ export default class WebClient {
                 return true;
             }
 
-            if (response.data) {
+            if (response.data && !response.data.error) {
                 // @ts-ignore
                 const robots = robotsParser(robotsUrl, response.data);
                 const result = robots.isAllowed(url, config.crawler.name) ?? true;
@@ -328,7 +328,7 @@ export default class WebClient {
             }
             
         } catch (error: any) {
-            log.crawler.error(error?.code || error?.message);
+            log.crawler.error(error?.code || error?.message || error?.error);
             return true;
         }
     }
