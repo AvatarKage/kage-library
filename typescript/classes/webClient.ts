@@ -285,7 +285,6 @@ export default class WebClient {
 
             return response.data;
         } catch (error: any) {
-            log.crawler.error(error?.code || error?.message);
             throw error;
         }
     }
