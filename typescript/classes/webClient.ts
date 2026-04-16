@@ -327,8 +327,7 @@ export default class WebClient {
             }
             
         } catch (error: any) {
-            log.crawler.error(error?.code || error?.message || error?.error);
-            return true;
+            throw error;
         }
     }
 }
