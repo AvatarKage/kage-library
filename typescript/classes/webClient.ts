@@ -285,7 +285,7 @@ export default class WebClient {
 
             return response.data;
         } catch (error: any) {
-            return true;
+            throw error;
         }
     }
 
@@ -323,11 +323,11 @@ export default class WebClient {
 
                 return result
             } else {
-                return true
+                return true;
             }
             
         } catch (error: any) {
-            throw error;
+            return true;
         }
     }
 }
