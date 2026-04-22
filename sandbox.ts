@@ -12,6 +12,7 @@ import { log } from "./typescript/modules/logging/log.js";
 import toArray from "./typescript/helpers/toArray.js";
 import WebClient from "./typescript/classes/webClient.js";
 import parseDuration from "./typescript/helpers/parseDuration.js";
+import { convertNumber } from "./typescript/helpers/convertNumber.js";
 
 export const snowflake = new Snowflake(config.generation.epoch);
 
@@ -64,3 +65,5 @@ log.crawler.success(await wc.callAPI("https://api.ipify.org?format=json"));
 
 // Better if in a cron
 log.crawler.success(wc.clearCache(parseDuration("1d")));
+
+log.c.info(convertNumber("1", "words"))
