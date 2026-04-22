@@ -18,6 +18,23 @@ const numToWord: Record<string, string> = Object.fromEntries(
     Object.entries(wordToNum).map(([word, num]) => [num, word])
 );
 
+/**
+ * Converts numbers or words inside a string.
+ *
+ * @param text - Input string (e.g. "I have one apple" or "I have 1 apple")
+ * @param format - Conversion mode:
+ *   - "numbers": converts words -> numbers ("one" -> "1")
+ *   - "words": converts numbers -> words ("1" -> "one")
+ *
+ * @returns Converted string
+ *
+ * @example
+ * convertNumber("I have one apple", "numbers")
+ * // "I have 1 apple"
+ *
+ * convertNumber("I have 1 apple", "words")
+ * // "I have one apple"
+ */
 export function convertNumber(text: string, format: Format): string {
     if (format === "numbers") {
         const pattern = new RegExp(`\\b(${Object.keys(wordToNum).join("|")})\\b`, "gi");
