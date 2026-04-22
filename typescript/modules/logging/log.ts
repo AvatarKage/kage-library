@@ -20,6 +20,59 @@ function writeToFile(scope: string, content: string) {
     fs.appendFileSync(file, content + "\n", "utf-8");
 }
 
+function formatArg(arg: any, depth = 0): string {
+    const indent = (lvl: number) => "    ".repeat(lvl);
+
+    if (typeof arg === "string") return `"${arg}"`;
+    if (typeof arg === "number" || typeof arg === "boolean") return String(arg);
+    if (arg === null) return "null";
+    if (arg === undefined) return "undefined";
+
+    if (arg instanceof Map) {
+        const entries = Array.from(arg.entries());
+
+        if (entries.length === 0) return "Map {}";
+
+        return `Map {\n${entries
+            .map(([k, v]) =>
+                `${indent(depth + 1)}${String(k)} => ${formatArg(v, depth + 1)}`
+            )
+            .join("\n")}\n${indent(depth)}}`;
+    }
+
+    if (arg instanceof Set) {
+        const values = Array.from(arg);
+
+        if (values.length === 0) return "Set {}";
+
+        return `Set {\n${values
+            .map(v => `${indent(depth + 1)}${formatArg(v, depth + 1)}`)
+            .join("\n")}\n${indent(depth)}}`;
+    }
+
+    if (Array.isArray(arg)) {
+        if (arg.length === 0) return "[]";
+
+        return `[\n${arg
+            .map(v => `${indent(depth + 1)}${formatArg(v, depth + 1)}`)
+            .join("\n")}\n${indent(depth)}]`;
+    }
+
+    if (typeof arg === "object") {
+        const entries = Object.entries(arg);
+
+        if (entries.length === 0) return "{}";
+
+        return `{\n${entries
+            .map(([k, v]) =>
+                `${indent(depth + 1)}${k}: ${formatArg(v, depth + 1)}`
+            )
+            .join("\n")}\n${indent(depth)}}`;
+    }
+
+    return String(arg);
+}
+
 function print(scope: string, level: string, args: any[], treeLevel = 0, endTree = false) {
     const now = DateTime.now();
     const time = chalk.gray(`${pad(now.hour, 2)}:${pad(now.minute, 2)}:${pad(now.second, 2)}`);
@@ -28,15 +81,7 @@ function print(scope: string, level: string, args: any[], treeLevel = 0, endTree
     const scopeIcons = icons[scope as any] ?? icons["default"];
     const icon = scopeIcons[level as any] ?? icons["default"][level as any] ?? icons["default"]["info"];
     const tree = chalk.gray(`${treeLevel > 1 ? "│ ".repeat(treeLevel - 1) : ""}${treeLevel !== 0 ? endTree ? "└─" : "├─" : ""}`);
-    
-    let message = args
-        .map((arg) =>
-            typeof arg === "string"
-                ? arg
-                : JSON.stringify(arg, null, 4)
-        )
-        .join(" ");
-
+    let message = args.map(formatArg).join(" ");
     const raw_message = message
     message = message.replace(/(https?:\/\/[^\s"',\)\]\}<>]+)/g, (url: any) => chalk.gray(` ${url}`));
 
