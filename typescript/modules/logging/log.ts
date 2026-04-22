@@ -23,7 +23,7 @@ function writeToFile(scope: string, content: string) {
 function formatArg(arg: any, depth = 0): string {
     const indent = (lvl: number) => "    ".repeat(lvl);
 
-    if (typeof arg === "string") return `"${arg}"`;
+    if (typeof arg === "string") return arg;
     if (typeof arg === "number" || typeof arg === "boolean") return String(arg);
     if (arg === null) return "null";
     if (arg === undefined) return "undefined";

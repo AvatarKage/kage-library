@@ -68,7 +68,7 @@ function pad(n, len = 2) {
 function formatArg(arg, depth = 0) {
     const indent = (lvl) => "    ".repeat(lvl);
 
-    if (typeof arg === "string") return `"${arg}"`;
+    if (typeof arg === "string") return arg;
     if (typeof arg === "number" || typeof arg === "boolean") return String(arg);
     if (arg === null) return "null";
     if (arg === undefined) return "undefined";
