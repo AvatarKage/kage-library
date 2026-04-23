@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import toml from "toml";
 
 import { log } from "../logging/log.js";
+import cleanJSON from "../../helpers/cleanJSON.js";
 
 const dir = process.cwd();
 
@@ -117,7 +118,7 @@ function setupConfig(obj: any) {
     return obj;
 }
 
-export const config: Config = {
+export const config: Config = cleanJSON({
     ...setupConfig(configTOML),
 
     folders: {
@@ -129,7 +130,7 @@ export const config: Config = {
         sql: resolve(dir, "src", "servers", "api", "sql")
         // Add more as needed
     }
-}.clean();
+});
 
 // @ts-ignore
 if (config.debug?.env) log.config.debug("env:", env);

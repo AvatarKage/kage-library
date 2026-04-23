@@ -5,9 +5,4 @@ declare global {
         toBoolean(): boolean;
         toNumber(): number;
     }
-
-    interface Object {
-        clean(): object;
-        toArray(): [];
-    }
 }
