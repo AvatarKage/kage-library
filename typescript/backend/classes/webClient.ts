@@ -3,7 +3,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import robotsParser from "robots-parser";
 
-import { config } from "../modules/config/readConfig.js";
+import { config } from "../config/readConfig.js";
 import { log } from "../modules/logging/log.js";
 import { DB } from "../types/database.js";
 

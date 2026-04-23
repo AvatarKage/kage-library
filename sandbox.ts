@@ -1,15 +1,15 @@
-import Snowflake from "./typescript/classes/snowflake.js";
-import { config } from "./typescript/modules/config/readConfig.js";
-import formatNumber from "./typescript/helpers/formatNumber.js";
-import URL from "./typescript/classes/url.js";
-import { toMs } from "./typescript/helpers/misc.js";
-import Database from "./typescript/classes/database.js";
-import Identifier from "./typescript/classes/identifier.js";
-import { log } from "./typescript/modules/logging/log.js";
-import toArray from "./typescript/helpers/toArray.js";
-import WebClient from "./typescript/classes/webClient.js";
-import parseDuration from "./typescript/helpers/parseDuration.js";
-import { convertNumber } from "./typescript/helpers/convertNumber.js";
+import Snowflake from "./typescript/backend/classes/snowflake.js";
+import { config } from "./typescript/backend/config/readConfig.js";
+import formatNumber from "./typescript/backend/helpers/formatNumber.js";
+import URL from "./typescript/backend/classes/url.js";
+import { toMs } from "./typescript/backend/helpers/misc.js";
+import Database from "./typescript/backend/classes/database.js";
+import Identifier from "./typescript/backend/classes/identifier.js";
+import { log } from "./typescript/backend/modules/logging/log.js";
+import toArray from "./typescript/backend/helpers/toArray.js";
+import WebClient from "./typescript/backend/classes/webClient.js";
+import parseDuration from "./typescript/backend/helpers/parseDuration.js";
+import { convertNumber } from "./typescript/backend/helpers/convertNumber.js";
 
 export const snowflake = new Snowflake(config.generation.epoch);
 

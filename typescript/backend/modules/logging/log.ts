@@ -3,7 +3,7 @@ import path from "path";
 import { DateTime } from "luxon";
 import chalk from "chalk";
 
-import { config } from "../config/readConfig.js";
+import { config } from "../../config/readConfig.js";
 import { pad } from "../../helpers/misc.js";
 import { colors } from "./colors.js";
 import { icons } from "./icons.js";

@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 
-import { config } from "../config/readConfig.js";
+import { config } from "../../config/readConfig.js";
 
 /**
  * Cleans up old log files in the log directory.

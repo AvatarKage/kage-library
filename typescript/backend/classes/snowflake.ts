@@ -1,4 +1,4 @@
-import { config } from "../modules/config/readConfig.js";
+import { config } from "../config/readConfig.js";
 import { log } from "../modules/logging/log.js";
 
 /**

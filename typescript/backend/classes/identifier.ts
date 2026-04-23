@@ -1,7 +1,7 @@
 import type { Identifier as IdentifierType } from "../types/identifier.js";
 
 import { log } from "../modules/logging/log.js";
-import { config } from "../modules/config/readConfig.js";
+import { config } from "../config/readConfig.js";
 
 export const identifiers: Record<IdentifierType, { regex: RegExp; length: number }> = {
     SHORTLINK: { regex: /[A-Za-z0-9]/, length: 8 },

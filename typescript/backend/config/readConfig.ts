@@ -3,8 +3,8 @@ import fs from "fs";
 import dotenv from "dotenv";
 import toml from "toml";
 
-import { log } from "../logging/log.js";
-import cleanJSON from "../../helpers/cleanJSON.js";
+import { log } from "../modules/logging/log.js";
+import cleanJSON from "../helpers/cleanJSON.js";
 
 const dir = process.cwd();
 
