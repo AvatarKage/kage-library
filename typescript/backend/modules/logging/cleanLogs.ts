@@ -1,3 +1,11 @@
+/* 
+————————————————————————————————————————————————————————————————
+Copyright (c) 2026 AvatarKage. Released under the MIT License
+
+https://avatarka.ge/github
+———————————————————————————————————————————————————————————————— 
+*/
+
 import path from "path";
 import fs from "fs";
 

@@ -1,3 +1,11 @@
+/* 
+————————————————————————————————————————————————————————————————
+Copyright (c) 2026 AvatarKage. Released under the MIT License
+
+https://avatarka.ge/github
+———————————————————————————————————————————————————————————————— 
+*/
+
 import { config } from "../config/readConfig.js";
 import { log } from "../modules/logging/log.js";
 

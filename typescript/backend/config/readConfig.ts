@@ -1,3 +1,11 @@
+/* 
+————————————————————————————————————————————————————————————————
+Copyright (c) 2026 AvatarKage. Released under the MIT License
+
+https://avatarka.ge/github
+———————————————————————————————————————————————————————————————— 
+*/
+
 import { resolve } from "path";
 import fs from "fs";
 import dotenv from "dotenv";

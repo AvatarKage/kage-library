@@ -1,8 +1,13 @@
+/* 
+————————————————————————————————————————————————————————————————
+Copyright (c) 2026 AvatarKage. Released under the MIT License
+
+https://avatarka.ge/github
+———————————————————————————————————————————————————————————————— 
+*/
+
 import fs from "fs";
 import path from "path";
-
-import "../../../../../src/packages/kage-library/extensions/string.js"
-import "../../../../../src/packages/kage-library/extensions/object.js"
 
 import { config } from "./readConfig.js";
 

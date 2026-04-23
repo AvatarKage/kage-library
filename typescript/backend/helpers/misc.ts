@@ -1,3 +1,11 @@
+/* 
+————————————————————————————————————————————————————————————————
+Copyright (c) 2026 AvatarKage. Released under the MIT License
+
+https://avatarka.ge/github
+———————————————————————————————————————————————————————————————— 
+*/
+
 /**
  * Pads a number with leading zeros to a fixed length.
  *

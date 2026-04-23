@@ -1,3 +1,11 @@
+/* 
+————————————————————————————————————————————————————————————————
+Copyright (c) 2026 AvatarKage. Released under the MIT License
+
+https://avatarka.ge/github
+———————————————————————————————————————————————————————————————— 
+*/
+
 // To properly render icons, you need to view this file using a Nerd Font: https://nerdfonts.com
 
 export const icons: Record<string, Record<string, string>> = {
