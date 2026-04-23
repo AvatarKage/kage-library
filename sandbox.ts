@@ -1,6 +1,3 @@
-import "./typescript/extensions/string.js"
-import "./typescript/extensions/object.js"
-
 import Snowflake from "./typescript/classes/snowflake.js";
 import { config } from "./typescript/modules/config/readConfig.js";
 import formatNumber from "./typescript/helpers/formatNumber.js";
