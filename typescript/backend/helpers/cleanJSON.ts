@@ -46,6 +46,7 @@ export default function cleanJSON(input: any): any {
         Object.keys(v).length === 0;
 
     const clean = (obj: any): any => {
+        if (Buffer.isBuffer(obj)) return obj; 
         if (!obj) return obj;
 
         if (typeof obj !== "object") return obj;
