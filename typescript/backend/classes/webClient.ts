@@ -47,6 +47,52 @@ export default class WebClient {
     }
 
     /**
+     * Ping a URL to check its latency
+     *
+     * @param url - The target URL
+     * @returns Object with status info
+     */
+    async ping(url: string) {
+        if (!this.isAllowed(url)) {
+            return { url, ok: false };
+        }
+
+        const httpsAgent = new https.Agent({
+            rejectUnauthorized: config.isProduction
+        });
+
+        try {
+            const start = Date.now();
+
+            const response = await axios.get(url, {
+                httpsAgent,
+                headers: {
+                    "User-Agent": this.getUserAgent()
+                },
+                timeout: 10000,
+                maxRedirects: 5,
+                validateStatus: () => true
+            });
+
+            const latency = Date.now() - start;
+
+            return {
+                url,
+                ok: response.status >= 200 && response.status < 400,
+                latency
+            };
+        } catch (error: any) {
+            log.crawler.error(error?.code || error?.message);
+
+            return {
+                url,
+                ok: false,
+                error: error?.code || error?.message
+            };
+        }
+    }
+
+    /**
      * Get metadata from cache (fetch fallback)
      *
      * @param url - The target URL

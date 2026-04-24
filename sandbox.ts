@@ -66,3 +66,5 @@ log.crawler.info(wc.clearCache(parseDuration("1d")));
 log.c.info(convertNumber("1", "words"))
 
 log.sandbox.info("This text will save to file").save();
+
+log.crawler.info(await wc.ping("https://avatarkage.com"))
