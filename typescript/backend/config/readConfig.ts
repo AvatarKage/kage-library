@@ -6,7 +6,7 @@ https://avatarka.ge/github
 ———————————————————————————————————————————————————————————————— 
 */
 
-import { resolve } from "path";
+import path, { resolve } from "path";
 import fs from "fs";
 import dotenv from "dotenv";
 import toml from "toml";
@@ -122,6 +122,15 @@ function setupConfig(obj: any) {
 
     if (obj.ips?.dev) delete obj.ips.dev;
     if (obj.domains?.dev) delete obj.domains.dev;
+
+    // obj.ssl = {
+    //     cert: fs.readFileSync(
+    //         path.join(resolve(dir, "config"), "ssl", `${obj.urls.main}.crt`)
+    //     ),
+    //     key: fs.readFileSync(
+    //         path.join(resolve(dir, "config"), "ssl", `${obj.urls.main}.key`)
+    //     )
+    // }
 
     return obj;
 }

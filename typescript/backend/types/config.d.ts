@@ -117,6 +117,11 @@ declare global {
             backups: string
             sql: string
             // Add more as needed
-        }
+        };
+
+        // ssl: {
+        //     cert: string,
+        //     key: string
+        // };
     }
 }
