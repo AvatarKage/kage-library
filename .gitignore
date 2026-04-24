@@ -13,9 +13,10 @@ package-lock.json
 nodemon.json
 server.ts
 tsconfig.json
-changelog.diff
+changelog.md
 notes.md
 todo.md
+roadmap.md
 
 # Extensions
 *.env
