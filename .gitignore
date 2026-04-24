@@ -5,7 +5,7 @@ dist
 logs
 data
 ssl
-/config/
+config
 
 # Files
 scan-checkpoint.json
@@ -16,6 +16,8 @@ tsconfig.json
 changelog.md
 todo.md
 roadmap.md
+config.d.ts
+lang.d.ts
 
 # Extensions
 *.env
