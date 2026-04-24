@@ -7,65 +7,51 @@ https://avatarka.ge/github
 */
 
 const colors = {
-    info: "color: #767676",
-    success: "color: #13a10e",
+    info: "color: #13a10e",
     warn: "color: #c19c00",
     error: "color: #c50f1f",
-    debug: "color: #881798",
-    trace: "color: #3a96dd"
+    debug: "color: #881798"
 };
 
 const icons = {
     "default": {
         "info": "",
-        "success": "",
         "warn": "",
         "error": "",
         "debug": "",
-        "trace": ""
     },
     "sw": {
         "info": ""
     },
     "config": {
         "info": "",
-        "success": "",
         "warn": "",
         "error": "",
         "debug": "",
-        "trace": ""
     },
     "server": {
         "info": "󰒋",
-        "success": "󰒋",
         "warn": "󰒋",
         "error": "󰒏",
         "debug": "󰒋",
-        "trace": "󰒋"
     },
     "search": {
         "info": "",
-        "success": "",
         "warn": "",
         "error": "",
         "debug": "",
-        "trace": ""
     },
     "mic": {
         "info": "󰍬",
-        "success": "󰍬",
         "warn": "󰍬",
         "error": "󰍭",
         "debug": "󰍬",
-        "trace": "󰍬"
     },
     "msg": {
         "info": "󰍡",
-        "success": "󰍡",
         "warn": "󰍡",
         "error": "󰍡",
         "debug": "󰍡",
-        "trace": "󰍡"
     }
 };
 
@@ -193,11 +179,9 @@ function createLogMethod(scope, level) {
 function scoped(scope) {
     return {
         info: createLogMethod(scope, "info"),
-        success: createLogMethod(scope, "success"),
         warn: createLogMethod(scope, "warn"),
         error: createLogMethod(scope, "error"),
-        debug: createLogMethod(scope, "debug"),
-        trace: createLogMethod(scope, "trace"),
+        debug: createLogMethod(scope, "debug")
     };
 }
 

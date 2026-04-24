@@ -9,11 +9,9 @@ https://avatarka.ge/github
 import chalk from "chalk";
 
 export const colors: Record<string, (text: string) => string> = {
-    info: chalk.gray,
-    success: chalk.green,
+    info: chalk.green,
     warn: chalk.yellow,
     error: chalk.red,
-    debug: chalk.magenta,
-    trace: chalk.cyan,
+    debug: chalk.cyan,
     terminate: chalk.bgRed.black,
 };

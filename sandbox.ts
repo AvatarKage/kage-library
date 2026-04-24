@@ -53,14 +53,14 @@ log.db.debug(db.contributors.query("SELECT * FROM contributors"));
 export const id = new Identifier(db.audits);
 const shortlink = id.generate("SHORTLINK");
 
-log.id.success(shortlink);
+log.id.info(shortlink);
 log.id.info(id.get(shortlink));
 
 const wc = new WebClient(db.metadata);
-log.crawler.success(await wc.getMetadata(url.href));
-log.crawler.success(await wc.callAPI("https://api.ipify.org?format=json"));
+log.crawler.info(await wc.getMetadata(url.href));
+log.crawler.info(await wc.callAPI("https://api.ipify.org?format=json"));
 
 // Better if in a cron
-log.crawler.success(wc.clearCache(parseDuration("1d")));
+log.crawler.info(wc.clearCache(parseDuration("1d")));
 
 log.c.info(convertNumber("1", "words"))

@@ -9,7 +9,6 @@ https://avatarka.ge/github
 import fs from "fs";
 import path from "path";
 import { DateTime } from "luxon";
-import chalk from "chalk";
 
 import { config } from "../../config/readConfig.js";
 import { pad } from "../../helpers/misc.js";
@@ -83,27 +82,26 @@ function formatArg(arg: any, depth = 0): string {
 
 function print(scope: string, level: string, args: any[], treeLevel = 0, endTree = false) {
     const now = DateTime.now();
-    const time = chalk.gray(`${pad(now.hour, 2)}:${pad(now.minute, 2)}:${pad(now.second, 2)}`);
-    const tag = chalk.gray(`[${scope.toUpperCase()}]`);
+    const time = `${pad(now.hour, 2)}:${pad(now.minute, 2)}:${pad(now.second, 2)}`;
+    const tag = `[${scope.toUpperCase()}]`;
     const color = colors[level] ?? ((t: string) => t);
     const scopeIcons = icons[scope as any] ?? icons["default"];
     const icon = scopeIcons[level as any] ?? icons["default"][level as any] ?? icons["default"]["info"];
-    const tree = chalk.gray(`${treeLevel > 1 ? "│ ".repeat(treeLevel - 1) : ""}${treeLevel !== 0 ? endTree ? "└─" : "├─" : ""}`);
+    const tree = `${treeLevel > 1 ? "│ ".repeat(treeLevel - 1) : ""}${treeLevel !== 0 ? endTree ? "└─" : "├─" : ""}`;
     let message = args.map(formatArg).join(" ");
     const raw_message = message
-    message = message.replace(/(https?:\/\/[^\s"',\)\]\}<>]+)/g, (url: any) => chalk.gray(` ${url}`));
+    message = message.replace(/(https?:\/\/[^\s"',\)\]\}<>]+)/g, (url: any) => ` ${url}`);
 
     const type =
+        level === "terminate" ? console.error :
         level === "error" ? console.error :
-        level === "warn" ? console.warn :
-        level === "debug" ? console.log :
-        level === "info" ? console.log :
+        level === "debug" ? console.debug :
         console.log;
 
     type(
         level === "terminate"
-            ? `${time} ${tree}${color(` ${config.debug.useNerdFonts ? "" : "[TERMINATE]"} ${message} `)}`
-            : `${time} ${tree}${color(`${config.debug.useNerdFonts ? icon : tag} ${message}`)}`
+            ? `${color(` ${time} ${tree}${config.debug.useNerdFonts ? "" : "[TERMINATE]"} ${message} `)}`
+            : `${color(`${time} ${tree}${config.debug.useNerdFonts ? icon : tag} ${message}`)}`
     );
 
     if (level !== "terminate") {
@@ -150,11 +148,9 @@ function createLogMethod(scope: string, level: string) {
 function scoped(scope: string) {
     return {
         info: createLogMethod(scope, "info"),
-        success: createLogMethod(scope, "success"),
         warn: createLogMethod(scope, "warn"),
         error: createLogMethod(scope, "error"),
-        debug: createLogMethod(scope, "debug"),
-        trace: createLogMethod(scope, "trace"),
+        debug: createLogMethod(scope, "debug")
     };
 }
 
@@ -166,11 +162,9 @@ function scoped(scope: string) {
  *
  * Levels:
  * - info
- * - success
  * - warn
  * - error
  * - debug
- * - trace
  * 
  * - terminate (no scope)
  *
