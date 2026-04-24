@@ -64,3 +64,5 @@ log.crawler.info(await wc.callAPI("https://api.ipify.org?format=json"));
 log.crawler.info(wc.clearCache(parseDuration("1d")));
 
 log.c.info(convertNumber("1", "words"))
+
+log.sandbox.info("This text will save to file").save();

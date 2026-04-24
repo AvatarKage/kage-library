@@ -80,7 +80,7 @@ function formatArg(arg: any, depth = 0): string {
     return String(arg);
 }
 
-function print(scope: string, level: string, args: any[], treeLevel = 0, endTree = false) {
+function print(scope: string, level: string, args: any[], treeLevel = 0, endTree = false, saveToFile = false) {
     const now = DateTime.now();
     const time = `${pad(now.hour, 2)}:${pad(now.minute, 2)}:${pad(now.second, 2)}`;
     const tag = `[${scope.toUpperCase()}]`;
@@ -104,7 +104,7 @@ function print(scope: string, level: string, args: any[], treeLevel = 0, endTree
             : `${color(`${time} ${tree}${config.debug.useNerdFonts ? icon : tag} ${message}`)}`
     );
 
-    if (level !== "terminate") {
+    if (saveToFile && level !== "terminate") {
         writeToFile(scope, `${pad(now.hour, 2)}:${pad(now.minute, 2)}:${pad(now.second, 2)} [${level.toUpperCase()}] ${raw_message}`);
     }
 }
@@ -122,6 +122,13 @@ function createLogMethod(scope: string, level: string) {
             },
             end() {
                 endTree = true;
+                return wrapper;
+            },
+            save() {
+                if (!printed) {
+                    printed = true;
+                    print(scope, level, args, treeLevel, endTree, true);
+                }
                 return wrapper;
             },
             then(resolve: any) {
@@ -171,13 +178,14 @@ function scoped(scope: string) {
  * Tree helpers:
  * - .tree(n) -> indentation level
  * - .end() -> marks last branch item
+ * - .save() -> saves the log to file
  * - .then() -> callback after flush
  *
  * @example
  * log.server.info("Starting server...")
  *
  * @example
- * log.server.success("Server started").tree(1)
+ * log.server.info("Server started").tree(1).save()
  *
  * @example
  * log.terminate("Server terminated").end()
