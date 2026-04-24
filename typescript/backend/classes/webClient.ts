@@ -82,12 +82,9 @@ export default class WebClient {
                 latency
             };
         } catch (error: any) {
-            log.crawler.error(error?.code || error?.message);
-
             return {
                 url,
-                ok: false,
-                error: error?.code || error?.message
+                ok: false
             };
         }
     }
