@@ -101,7 +101,7 @@ export default class Snowflake {
         const id = ((timestamp - this.epoch) << 22n) | (BigInt(this.machineId) << 12n) | this.sequence;
 
         if (config.debug.snowflake) {
-            log.snowflake.trace(`Generated: ${id.toString()}`);
+            log.snowflake.debug(`Generated: ${id.toString()}`);
         }
         
         return id.toString();

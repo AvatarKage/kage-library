@@ -82,7 +82,7 @@ export default class Identifier {
                 );
 
                 if (config.debug.snowflake) {
-                    log.identifiers.trace(`Generated ${type}: ${id}`);
+                    log.identifiers.debug(`Generated ${type}: ${id}`);
                 }
 
                 return id;
