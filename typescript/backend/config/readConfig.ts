@@ -125,10 +125,10 @@ function setupConfig(obj: any) {
 
     // obj.ssl = {
     //     cert: fs.readFileSync(
-    //         path.join(resolve(dir, "config"), "ssl", `${obj.urls.main}.crt`)
+    //         path.join(resolve(dir, "config"), "ssl", `${obj.domains.main}.crt`)
     //     ),
     //     key: fs.readFileSync(
-    //         path.join(resolve(dir, "config"), "ssl", `${obj.urls.main}.key`)
+    //         path.join(resolve(dir, "config"), "ssl", `${obj.domains.main}.key`)
     //     )
     // }
 
