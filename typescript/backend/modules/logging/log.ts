@@ -93,7 +93,14 @@ function print(scope: string, level: string, args: any[], treeLevel = 0, endTree
     const raw_message = message
     message = message.replace(/(https?:\/\/[^\s"',\)\]\}<>]+)/g, (url: any) => chalk.gray(` ${url}`));
 
-    console.log(
+    const type =
+        level === "error" ? console.error :
+        level === "warn" ? console.warn :
+        level === "debug" ? console.log :
+        level === "info" ? console.log :
+        console.log;
+
+    type(
         level === "terminate"
             ? `${time} ${tree}${color(` ${config.debug.useNerdFonts ? "" : "[TERMINATE]"} ${message} `)}`
             : `${time} ${tree}${color(`${config.debug.useNerdFonts ? icon : tag} ${message}`)}`
