@@ -10,6 +10,7 @@ import path from "path";
 import fs from "fs";
 
 import { config } from "../../config/readConfig.js";
+import { log } from "./log.js";
 
 /**
  * Cleans up old log files in the log directory.
@@ -25,7 +26,7 @@ export default function cleanLogs(): void {
     function walk(dir: string) {
         fs.readdir(dir, { withFileTypes: true }, (err, entries) => {
             if (err) {
-                console.error("Failed to read directory:", dir, err);
+                log.dir.error("Failed to read directory:", dir, err).save();
                 return;
             }
 
@@ -46,7 +47,7 @@ export default function cleanLogs(): void {
                 if (name < cutoff) {
                     fs.unlink(fullPath, (err) => {
                         if (err) {
-                            console.error("Delete failed:", fullPath, err);
+                            log.dir.error("Delete failed:", fullPath, err).save();
                         }
                     });
                 }

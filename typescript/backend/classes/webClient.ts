@@ -82,7 +82,7 @@ export default class WebClient {
                 latency
             };
         } catch (error: any) {
-            log.crawler.error(error?.code || error?.message);
+            log.crawler.error(error?.code || error?.message).save();
             
             return {
                 url,
@@ -203,7 +203,7 @@ export default class WebClient {
                 })()
             };
         } catch (error: any) {
-            log.crawler.error(error?.code || error?.message);
+            log.crawler.error(error?.code || error?.message).save();
 
             return {
                 url,
@@ -279,7 +279,7 @@ export default class WebClient {
             return $.html();
 
         } catch (error: any) {
-            log.crawler.error(error?.code || error?.message);
+            log.crawler.error(error?.code || error?.message).save();
 
             return null
         }
@@ -372,7 +372,7 @@ export default class WebClient {
                 const robots = robotsParser(robotsUrl, response.data);
                 const result = robots.isAllowed(url, config.crawler.name) ?? true;
 
-                if (!result) log.crawler.warn(`${config.crawler.name} is not allowed to crawl ${url}`)
+                if (!result) log.crawler.warn(`${config.crawler.name} is not allowed to crawl ${url}`).save()
 
                 return result
             } else {
