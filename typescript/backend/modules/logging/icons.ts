@@ -123,5 +123,37 @@ export const icons: Record<string, Record<string, string>> = {
         "warn": "",
         "error": "",
         "debug": "",
+    },
+    "msg": {
+        "info": "󰍡",
+        "success": "󰍡",
+        "warn": "󰍡",
+        "error": "󰍡",
+        "debug": "󰍡",
+        "trace": "󰍡"
+    },
+    "mic": {
+        "info": "󰍬",
+        "success": "󰍬",
+        "warn": "󰍬",
+        "error": "󰍭",
+        "debug": "󰍬",
+        "trace": "󰍬"
+    },
+    "auth": {
+        "info": "",
+        "success": "",
+        "warn": "",
+        "error": "",
+        "debug": "",
+        "trace": ""
+    },
+    "ws": {
+        "info": "󰚥",
+        "success": "󰚥",
+        "warn": "󰚥",
+        "error": "󰚦",
+        "debug": "󰚥",
+        "trace": "󰚥"
     }
 }
