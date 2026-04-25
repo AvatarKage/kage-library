@@ -155,5 +155,13 @@ export const icons: Record<string, Record<string, string>> = {
         "error": "󰚦",
         "debug": "󰚥",
         "trace": "󰚥"
+    },
+    "react": {
+        "info": "󰜈",
+        "success": "󰜈",
+        "warn": "󰜈",
+        "error": "󰜈",
+        "debug": "󰜈",
+        "trace": "󰜈"
     }
 }
