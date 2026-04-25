@@ -10,48 +10,84 @@ const colors = {
     info: "color: #13a10e",
     warn: "color: #c19c00",
     error: "color: #c50f1f",
-    debug: "color: #881798"
+    debug: "color: #3a96dd"
 };
 
 const icons = {
     "default": {
         "info": "",
+        "success": "",
         "warn": "",
         "error": "",
         "debug": "",
+        "trace": ""
     },
     "sw": {
         "info": ""
     },
     "config": {
         "info": "",
+        "success": "",
         "warn": "",
         "error": "",
         "debug": "",
+        "trace": ""
     },
     "server": {
         "info": "󰒋",
+        "success": "󰒋",
         "warn": "󰒋",
         "error": "󰒏",
         "debug": "󰒋",
+        "trace": "󰒋"
     },
     "search": {
         "info": "",
+        "success": "",
         "warn": "",
         "error": "",
         "debug": "",
+        "trace": ""
     },
     "mic": {
         "info": "󰍬",
+        "success": "󰍬",
         "warn": "󰍬",
         "error": "󰍭",
         "debug": "󰍬",
+        "trace": "󰍬"
     },
     "msg": {
         "info": "󰍡",
+        "success": "󰍡",
         "warn": "󰍡",
         "error": "󰍡",
         "debug": "󰍡",
+        "trace": "󰍡"
+    },
+    "auth": {
+        "info": "",
+        "success": "",
+        "warn": "",
+        "error": "",
+        "debug": "",
+        "trace": ""
+    },
+    "status": {
+        "info": "󰖩",
+        "success": "󰖩",
+        "warn": "󱚵",
+        "error": "󱚼",
+        "debug": "󰖩",
+        "trace": "󰖩"
+    },
+    "ws": {
+        "info": "󰚥",
+        "success": "󰚥",
+        "warn": "󰚥",
+        "error": "󰚦",
+        "debug": "󰚥",
+        "trace": "󰚥"
     }
 };
 
@@ -117,25 +153,21 @@ function print(scope, level, args, treeLevel = 0, endTree = false) {
     const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
     const scopeIcons = icons[scope] || icons.default;
     const icon = scopeIcons[level] || icons.default[level] || "•";
-    const tree = treeLevel > 1  ? "│ ".repeat(treeLevel - 1) + (endTree ? "└─" : "├─") : treeLevel === 1 ? (endTree ? "└─" : "├─") : "";
+    const tree = treeLevel > 1 ? "│ ".repeat(treeLevel - 1) + (endTree ? "└─" : "├─") : treeLevel === 1 ? (endTree ? "└─" : "├─") : "";
     const levelStyle = colors[level] || "";
-    const infoStyle = colors.info;
-    let message = args.map(formatArg).join(" ");
+    const message = args.map(formatArg).join(" ");
     const parts = message.split(/(https?:\/\/[^\s"',\)\]\}<>]+)/g);
-    let fmt = `%c${time} ${tree}%c${icon} `;
-    const styles = [ infoStyle, levelStyle ];
+    let text = `${time} ${tree}${icon} `;
 
     for (const part of parts) {
         if (/^https?:\/\//.test(part)) {
-            fmt += `%c🔗 ${part}%c`;
-            styles.push(infoStyle, levelStyle);
+            text += `🔗 ${part}`;
         } else {
-            fmt += `%c${part}%c`;
-            styles.push(levelStyle, levelStyle);
+            text += part;
         }
     }
 
-    console.log(fmt, ...styles);
+    console.log(`%c${text}`, levelStyle);
 }
 
 function createLogMethod(scope, level) {
@@ -157,8 +189,8 @@ function createLogMethod(scope, level) {
             
             then(cb) {
                 if (!printed) {
-                    printed = true;
-                    print(scope, level, args, treeLevel, endTree);
+                        printed = true;
+                        print(scope, level, args, treeLevel, endTree);
                     }
                     cb?.();
                     return wrapper;
