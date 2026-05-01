@@ -4,26 +4,29 @@ node_modules
 dist
 logs
 data
-ssl
-config
+backups
+ssl/*
+dev
 
 # Files
-scan-checkpoint.json
 package-lock.json
-nodemon.json
-server.ts
-tsconfig.json
+app.config.ts
 changelog.md
-todo.md
+eslint.config.js
 roadmap.md
-config.d.ts
-lang.d.ts
+todo.md
+tsconfig.json
 
 # Extensions
 *.env
+!*.env.example
 *.log
 *.db
 *.sqlite
 *.idea
 *.ini
 *.lnk
+*.crt
+*.key
+!*.crt.example
+!*.key.example

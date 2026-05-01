@@ -1,6 +1,6 @@
 /* 
 ————————————————————————————————————————————————————————————————
-Copyright (c) 2026 AvatarKage. Released under the MIT License
+Copyright (c) 2026 AvatarKage. Released under the MIT License.
 
 https://avatarka.ge/github
 ———————————————————————————————————————————————————————————————— 
@@ -36,31 +36,31 @@ https://avatarka.ge/github
  * //   meta: { valid: "yes" }
  * // }
  */
-export default function cleanJSON(input: any): any {
-    const seen = new WeakSet();
+export default function cleanJSON(input: unknown): unknown {
+    const seen = new WeakSet<object>();
 
-    const isEmptyObject = (v: any) =>
+    const isEmptyObject = (v: unknown) =>
         typeof v === "object" &&
         v !== null &&
         !Array.isArray(v) &&
-        Object.keys(v).length === 0;
+        Object.keys(v as object).length === 0;
 
-    const clean = (obj: any): any => {
-        if (Buffer.isBuffer(obj)) return obj; 
-        if (!obj) return obj;
+    const clean = (obj: unknown): unknown => {
+        if (Buffer.isBuffer(obj)) return obj;
+        if (obj === null || obj === undefined) return undefined;
 
         if (typeof obj !== "object") return obj;
 
-        if (seen.has(obj)) return undefined;
-        seen.add(obj);
+        if (seen.has(obj as object)) return undefined;
+        seen.add(obj as object);
 
         if (Array.isArray(obj)) {
             const arr = obj
                 .map(clean)
                 .filter(v =>
+                    v !== undefined &&
                     v !== null &&
                     v !== "" &&
-                    v !== undefined &&
                     !(Array.isArray(v) ? v.length === 0 : isEmptyObject(v))
                 );
 
@@ -68,9 +68,9 @@ export default function cleanJSON(input: any): any {
         }
 
         const cleaned = Object.fromEntries(
-            Object.entries(obj)
+            Object.entries(obj as Record<string, unknown>)
                 .map(([k, v]) => [k, clean(v)])
-                .filter(([_, v]) =>
+                .filter(([, v]) =>
                     v !== undefined &&
                     v !== null &&
                     v !== "" &&

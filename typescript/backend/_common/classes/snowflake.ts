@@ -1,13 +1,10 @@
 /* 
 ————————————————————————————————————————————————————————————————
-Copyright (c) 2026 AvatarKage. Released under the MIT License
+Copyright (c) 2026 AvatarKage. Released under the MIT License.
 
 https://avatarka.ge/github
 ———————————————————————————————————————————————————————————————— 
 */
-
-import { config } from "../config/readConfig.js";
-import { log } from "../modules/logging/log.js";
 
 /**
  * Snowflake ID Generator
@@ -19,11 +16,11 @@ import { log } from "../modules/logging/log.js";
  * 
  * @example
  * const epoch = 1767225600000; // Custom epoch (Jan 1, 2026)
- * const machineId = 1; // Machine identifier (0–1023)
+ * const machineId = 0; // Machine identifier (0–1023)
  * 
  * const snowflake = new Snowflake(epoch, machineId);
  * 
- * const id = snowflake.generate();
+ * const id = snowflake.gen();
  * console.log(id);
  * 
  * const date = snowflake.decode(id);
@@ -82,7 +79,7 @@ export default class Snowflake {
      * 
      * @returns {string} A unique ID as a string
      */
-    public generate(): string {
+    public gen(): string {
         let timestamp = this.currentTime();
 
         if (timestamp === this.lastTimestamp) {
@@ -100,10 +97,6 @@ export default class Snowflake {
 
         const id = ((timestamp - this.epoch) << 22n) | (BigInt(this.machineId) << 12n) | this.sequence;
 
-        if (config.debug.snowflake) {
-            log.snowflake.debug(`Generated: ${id.toString()}`);
-        }
-        
         return id.toString();
     }
 }

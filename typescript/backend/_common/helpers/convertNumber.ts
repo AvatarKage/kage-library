@@ -1,6 +1,6 @@
 /* 
 ————————————————————————————————————————————————————————————————
-Copyright (c) 2026 AvatarKage. Released under the MIT License
+Copyright (c) 2026 AvatarKage. Released under the MIT License.
 
 https://avatarka.ge/github
 ———————————————————————————————————————————————————————————————— 

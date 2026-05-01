@@ -1,6 +1,6 @@
 /* 
 ————————————————————————————————————————————————————————————————
-Copyright (c) 2026 AvatarKage. Released under the MIT License
+Copyright (c) 2026 AvatarKage. Released under the MIT License.
 
 https://avatarka.ge/github
 ———————————————————————————————————————————————————————————————— 
@@ -11,37 +11,62 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import robotsParser from "robots-parser";
 
-import { config } from "../config/readConfig.js";
-import { log } from "../modules/logging/log.js";
-import { DB } from "../types/database.js";
+import { config } from "../../../../app.config.js";
+import { DB } from "../types/database.type.js";
+
+type CrawlerConfig = {
+    name: string;
+    version: string;
+    website?: string;
+    contact?: string;
+};
+
+export interface Metadata {
+    url: string | null;
+    siteName: string | null;
+    icon: string | null;
+    title: string | null;
+    description: string | null;
+    image: string | null;
+    type: string | null;
+    accent: string | null;
+    jsonLd: Record<string, unknown>;
+}
 
 /**
- * A lightweight webclient with:
- * - robots.txt compliance
- * - metadata caching
- * - raw HTML crawling
- * - API wrapper
- *
+ * A lightweight webclient with robots.txt compliance, metadata caching, crawling, and an API wrapper.
+ * A metadata table will be created in the database.
+ * 
  * @example
- * const wc = new WebClient(db.metadata);
+ * const wc = new Webclient(
+ *     {
+ *         name: "ExampleCrawler",
+ *         version: "1.0",
+ *         website: "https://example.com",
+ *         contact: "admin@example.com"
+ *     },
+ *     db.metadata
+ * );
  *
  * const meta = await wc.getMetadata("https://example.com");
  * const html = await wc.crawl("https://example.com");
  * const api = await wc.callAPI("https://api.example.com/data");
  */
-export default class WebClient {
-    private database: DB | any;
+export default class Webclient {
+    private crawler: CrawlerConfig;
+    private database: DB | undefined;
 
-    constructor(database?: DB) {
-        this.database = database ?? null;
+    constructor(crawler: CrawlerConfig, database?: DB) {
+        this.crawler = crawler
+        this.database = database ?? undefined;
     }
 
     private getUserAgent() {
-        const hasContact = config.crawler.website || config.crawler.contact;
+        const hasContact = this.crawler.website || this.crawler.contact;
 
-        return `${config.crawler.name}/${config.crawler.version} ${
+        return `${this.crawler.name}/${this.crawler.version} ${
             hasContact
-                ? `(+${config.crawler.website}${config.crawler.contact ? `; ${config.crawler.contact}` : ""})`
+                ? `(+${this.crawler.website}${this.crawler.contact ? `; ${this.crawler.contact}` : ""})`
                 : ""
         }`;
     }
@@ -81,13 +106,12 @@ export default class WebClient {
                 ok: response.status >= 200 && response.status < 400,
                 latency
             };
-        } catch (error: any) {
-            log.crawler.error(error?.code || error?.message).save();
-            
-            return {
-                url,
-                ok: false
-            };
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw error;
+            }
+
+            throw new Error("Unknown error occurred");
         }
     }
 
@@ -98,30 +122,71 @@ export default class WebClient {
      * @returns Cached or fetched metadata object
      */
     async getMetadata(url: string) {
-        const cached = this.database.query("SELECT * FROM metadata WHERE url = ?", [url]).rows?.[0];
+        if (!this.database) {
+            throw new Error("A valid database was not passed to WebClient");
+        }
+
+        this.database.transaction((query) => {
+            if (!query("SELECT * FROM metadata LIMIT 1").success) { 
+                query(
+                    `
+                        CREATE TABLE IF NOT EXISTS metadata (
+                            url TEXT PRIMARY KEY,
+                            siteName TEXT,
+                            icon TEXT,
+                            title TEXT,
+                            description TEXT,
+                            image TEXT,
+                            type TEXT,
+                            accent TEXT,
+                            cacheDate TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+                        );
+                    `
+                ); 
+            };
+        });
+
+        const result = this.database.query(
+            "SELECT * FROM metadata WHERE url = ?",
+            [url]
+        );
+
+        if (!result.success) {
+            throw new Error(String(result.error));
+        }
+
+        const cached = result.rows?.[0];
 
         if (cached) {
             return cached;
         }
 
-        const fetch: any = await this.fetchMetadata(url);
+        const fetch = await this.fetchMetadata(url);
 
-        this.database.query(`
+        if (!fetch) {
+            throw new Error(`Failed to fetch metadata for ${url}`);
+        }
+
+        const metadata: Metadata = fetch;
+
+        this.database.query(
+            `
             INSERT INTO metadata (url, siteName, icon, title, description, image, type, accent)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `,
             [
-                fetch.url,
-                fetch.siteName,
-                fetch.icon,
-                fetch.title,
-                fetch.description,
-                fetch.image,
-                fetch.type,
-                fetch.accent
+                metadata.url,
+                metadata.siteName,
+                metadata.icon,
+                metadata.title,
+                metadata.description,
+                metadata.image,
+                metadata.type,
+                metadata.accent
             ]
         );
 
-        return fetch;
+        return metadata;
     }
 
     /**
@@ -202,20 +267,12 @@ export default class WebClient {
                     }
                 })()
             };
-        } catch (error: any) {
-            log.crawler.error(error?.code || error?.message).save();
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw error;
+            }
 
-            return {
-                url,
-                siteName: null,
-                icon: null,
-                title: null,
-                description: null,
-                image: null,
-                type: null,
-                accent: null,
-                jsonLd: null
-            };
+            throw new Error("Unknown error occurred");
         }
     }
 
@@ -227,6 +284,8 @@ export default class WebClient {
      * md.clearCache(60000);
      */
     clearCache(duration: number) {
+        if (!this.database) throw new Error("A valid database was not passed to WebClient");
+
         const cutoff = new Date(Date.now() - duration).toISOString();
 
         const result = this.database.query(
@@ -278,10 +337,12 @@ export default class WebClient {
 
             return $.html();
 
-        } catch (error: any) {
-            log.crawler.error(error?.code || error?.message).save();
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw error;
+            }
 
-            return null
+            throw new Error("Unknown error occurred");
         }
     }
 
@@ -298,17 +359,17 @@ export default class WebClient {
      *   }
      * });
      */
-    async callAPI(
+    async callAPI<T = unknown>(
         url: string,
         options?: {
             method?: "GET" | "POST" | "PUT" | "DELETE";
             auth?: string;
             format?: "json" | "text" | "binary";
-            data?: any;
+            data?: unknown;
             headers?: Record<string, string>;
         }
-    ) {
-        if (!this.isAllowed(url)) return;
+    ): Promise<T> {
+        if (!this.isAllowed(url)) throw new Error("Crawler is not allowed to crawl:" + url);
 
         const httpsAgent = new https.Agent({
             rejectUnauthorized: config.isProduction
@@ -337,8 +398,12 @@ export default class WebClient {
             });
 
             return response.data;
-        } catch (error: any) {
-            throw error;
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw error;
+            }
+
+            throw new Error("Unknown error occurred");
         }
     }
 
@@ -368,19 +433,22 @@ export default class WebClient {
             }
 
             if (response.data && !response.data.error) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 const robots = robotsParser(robotsUrl, response.data);
-                const result = robots.isAllowed(url, config.crawler.name) ?? true;
-
-                if (!result) log.crawler.warn(`${config.crawler.name} is not allowed to crawl ${url}`).save()
+                const result = robots.isAllowed(url, this.crawler.name) ?? true;
 
                 return result
             } else {
                 return true;
             }
             
-        } catch (error: any) {
-            return true;
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw error;
+            }
+
+            throw new Error("Unknown error occurred");
         }
     }
 }

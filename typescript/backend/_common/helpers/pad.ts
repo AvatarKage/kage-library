@@ -1,6 +1,6 @@
 /* 
 ————————————————————————————————————————————————————————————————
-Copyright (c) 2026 AvatarKage. Released under the MIT License
+Copyright (c) 2026 AvatarKage. Released under the MIT License.
 
 https://avatarka.ge/github
 ———————————————————————————————————————————————————————————————— 
@@ -18,15 +18,3 @@ https://avatarka.ge/github
  * pad(42, 5); // "00042"
  */
 export const pad = (n: number, p: number) => n.toString().padStart(p, "0");
-
-/**
- * Converts milliseconds to seconds as a formatted string.
- *
- * @param t - Time value in milliseconds.
- * @returns Time converted to seconds, rounded to 3 decimal places.
- *
- * @example
- * toMs(1); // "0.001"
- * toMs(1500); // "1.500"
- */
-export const toMs = (t: number) => (t / 1000).toFixed(3);

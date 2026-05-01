@@ -1,17 +1,16 @@
 /* 
 ————————————————————————————————————————————————————————————————
-Copyright (c) 2026 AvatarKage. Released under the MIT License
+Copyright (c) 2026 AvatarKage. Released under the MIT License.
 
 https://avatarka.ge/github
 ———————————————————————————————————————————————————————————————— 
 */
 
-import fs from "fs";
-import path from "path";
-
-import type { DB } from "../types/database.js";
-
 import Sqlite from "better-sqlite3";
+import path from "path";
+import fs from "fs";
+
+import { DB, QueryResult } from "../types/database.type.js";
 
 /**
  * Loads SQL either from a raw string or from a `.sql` file.
@@ -61,15 +60,15 @@ export default class Database implements DB {
      * @example
      * query("SELECT * FROM table WHERE field = ?", [value])
      */
-    query = <T extends object = any>(
+    query = <T extends object = Record<string, unknown>>(
         sql: string,
-        params: any[] = []
-    ): { success: boolean; rows?: T[]; rowCount?: number; lastInsertRowid?: number; changes?: number; error?: any } => {
+        params: unknown[] = []
+    ): QueryResult<T> => {
         try {
             const statements = loadSql(sql)
                 .trim()
-                .split(';')
-                .map(s => s.trim())
+                .split(";")
+                .map((s) => s.trim())
                 .filter(Boolean);
 
             let results: T[] = [];
@@ -90,16 +89,26 @@ export default class Database implements DB {
                     changes += info.changes;
 
                     if (info.lastInsertRowid !== undefined) {
-                        lastInsertRowid = typeof info.lastInsertRowid === "bigint"
-                            ? Number(info.lastInsertRowid)
-                            : info.lastInsertRowid;
+                        lastInsertRowid =
+                            typeof info.lastInsertRowid === "bigint"
+                                ? Number(info.lastInsertRowid)
+                                : info.lastInsertRowid;
                     }
                 }
             }
 
-            return { success: true, rows: results, rowCount, lastInsertRowid, changes };
+            return {
+                success: true,
+                rows: results,
+                rowCount,
+                lastInsertRowid,
+                changes,
+            };
         } catch (error) {
-            return { success: false, error };
+            return {
+                success: false,
+                error,
+            };
         }
     };
 
@@ -115,9 +124,7 @@ export default class Database implements DB {
      *   q("INSERT INTO table(field) VALUES(?)", ["value"]);
      * });
      */
-    transaction = (
-        fn: (q: <U extends object = any>(sql: string, params?: any[]) => { success: boolean, rows?: U[], error?: any }) => void
-    ) => {
+    transaction: DB["transaction"] = (fn) => {
         const trx = this.db.transaction(() => {
             fn(this.query);
         });
