@@ -1,6 +1,26 @@
-import { Database, Identifier, Logger, parseDuration, Snowflake, URL, Webclient } from "kage-library";
+import { 
+    // Classes
+    Database,
+    Identifier,
+    Logger,
+    Snowflake,
+    URL,
+    Webclient,
+    // WsClient (FRONTEND-ONLY),
 
-import { config } from "./app.config.js";
+    // Helpers
+    cleanJSON,
+    convertNumber,
+    formatNumber,
+    // getReqUrl,
+    pad,
+    parseDuration,
+    // shutdownServer,
+
+    // Services
+    // backupService,
+    // I18nService
+} from "kage-library";
 
 /* 
 ————————————————————————————————————————————————————————————————
@@ -11,7 +31,7 @@ Logger
 // Recommended to export per server
 export const log = new Logger({
     path: "/logs/sandbox", 
-    useNerdFonts: config.useNerdFonts
+    useNerdFonts: true // https://nerdfonts.com
 });
 
 log.test.info("This text will be saved to the logs folder").save();
@@ -25,8 +45,8 @@ Snowflake
 
 // Recommended to export per server (unique machine per server)
 const snowflake = new Snowflake(
-    config.generation.epoch, 
-    config.generation.machine
+    "2026-01-01T00:00:00.000Z", 
+    0
 );
 
 const snowflakeId = snowflake.gen();
@@ -92,12 +112,19 @@ Webclient
 
 // Recommended to export with the server managing databases
 const wc = new Webclient({ 
-    crawler: config.crawler, 
+    crawler: {
+        name: "Example",
+        version: "1.0",
+        website: "https://example.com",
+        contact: "admin@example.com"
+    }, 
     database: db.metadata,
-    useSecureSSL: config.isProduction
+    useSecureSSL: false
 });
 
-log.network.info(await wc.getMetadata(url.href));
+const metadata = await wc.getMetadata(url.href)
+
+log.network.info(metadata);
 
 // Recommended to run with cron
 log.network.info(wc.clearCache(parseDuration("1d")));
@@ -110,7 +137,7 @@ Backup
 
 // import backupService from "./typescript/backend/_common/services/backup.service.js";
 
-// backupService(config.folders.data, config.folders.backups);
+// backupService("/my-app/data", "/my-app/backups");
 
 /* 
 ————————————————————————————————————————————————————————————————
@@ -122,8 +149,20 @@ I18n
 //     { 
 //         localesPath: "/public/locales", 
 //         locale: "en", 
-//        defaultLocale: config.metadata.locale 
+//        defaultLocale: "en-US"
 //     }
 // );
 
 // log.i18n.info(i18n.t("maintenance.reason"))
+
+/* 
+————————————————————————————————————————————————————————————————
+Helpers
+———————————————————————————————————————————————————————————————— 
+*/
+
+log.test.info(cleanJSON(metadata)) // Removes all empty and undefined/null entries
+log.test.info(convertNumber("One apple", "numbers")) // 1 apple
+log.test.info(formatNumber(1234567)) // { string: "1,234,567", short: "1.2M", long: "1.2 Million" }
+log.test.info(pad(42, 5)) // "00042"
+log.test.info(parseDuration("7d")) // 604800000
