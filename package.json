@@ -1,13 +1,16 @@
 {
-  "name": "my-app",
-  "version": "0.0.1-prealpha-811b96b",
-  "license": "Copyright (c) 2026 Example, LLC. All Rights Reserved.",
+  "name": "kage-library",
+  "version": "1.0.1",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "test": "tsx main.test.ts",
+    "publish:npm": "cd packages/node && npm publish && cd ../../",
+    "build": "tsx dev/node/build.mts",
     "backup": "tsx dev/backup.ts",
-    "clean": "rimraf logs",
-    "sync": "tsx dev/syncConfig.ts"
+    "clean": "rimraf packages/node/dist && rimraf logs",
+    "sync": "tsx dev/syncConfig.ts",
+    "minify": "npx esbuild \"packages/node/dist/**/*.js\" --format=esm --minify --banner:js=\"/* This file is part of Kage Library. Copyright (c) 2026 AvatarKage. Released under the MIT License. */\" --outdir=packages/node/dist --allow-overwrite"
   },
   "dependencies": {
     "@sapphire/stopwatch": "^1.5.4",
@@ -29,6 +32,7 @@
     "http-proxy": "^1.18.1",
     "i18next": "^26.0.8",
     "i18next-http-backend": "^3.0.6",
+    "kage-library": "^1.0.0",
     "luxon": "^3.7.2",
     "node-cron": "^4.2.1",
     "path": "^0.12.7",
@@ -54,7 +58,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/http-proxy": "^1.17.17",
     "@types/luxon": "^3.7.1",
-    "@types/node": "^25.5.2",
+    "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/voucher-code-generator": "^1.1.3",

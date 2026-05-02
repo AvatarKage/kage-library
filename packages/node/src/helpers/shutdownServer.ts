@@ -23,7 +23,7 @@ https://avatarka.ge/github
  */
 
 /* eslint-disable */
-export async function shutdownServer(
+export default async function shutdownServer(
     log: any,
     db?: any
 ) {

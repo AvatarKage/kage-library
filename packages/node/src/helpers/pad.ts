@@ -17,4 +17,6 @@ https://avatarka.ge/github
  * pad(5, 2); // "05"
  * pad(42, 5); // "00042"
  */
-export const pad = (n: number, p: number) => n.toString().padStart(p, "0");
+export default function pad(n: number, p: number): string {
+    return n.toString().padStart(p, "0");
+}

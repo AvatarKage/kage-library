@@ -1,3 +1,5 @@
+import { Database, Identifier, Logger, parseDuration, Snowflake, URL, Webclient } from "kage-library";
+
 import { config } from "./app.config.js";
 
 /* 
@@ -5,8 +7,6 @@ import { config } from "./app.config.js";
 Logger
 ———————————————————————————————————————————————————————————————— 
 */
-
-import Logger from "./typescript/_common/classes/logger.js";
 
 // Recommended to export per server
 export const log = new Logger({
@@ -22,8 +22,6 @@ log.test.info("This text won't be saved to the logs folder");
 Snowflake
 ———————————————————————————————————————————————————————————————— 
 */
-
-import Snowflake from "./typescript/backend/_common/classes/snowflake.js";
 
 // Recommended to export per server (unique machine per server)
 const snowflake = new Snowflake(
@@ -41,8 +39,6 @@ log.snowflake.info("Decoded snowflake:", snowflake.decode(snowflakeId));
 Database
 ———————————————————————————————————————————————————————————————— 
 */
-
-import Database from "./typescript/backend/_common/classes/database.js";
 
 const db = {
     audits: new Database("data/databases/audits.sqlite"),
@@ -65,8 +61,6 @@ Identifier
 ———————————————————————————————————————————————————————————————— 
 */
 
-import Identifier from "./typescript/backend/_common/classes/identifier.js";
-
 // Recommended to export with the server managing databases
 const id = new Identifier(db.audits);
 const generatedHash = id.gen("HASH");
@@ -79,8 +73,6 @@ log.id.info("Identifier type:", id.get(generatedHash));
 Url
 ———————————————————————————————————————————————————————————————— 
 */
-
-import URL from "./typescript/backend/_common/classes/url.js";
 
 const url = new URL("http://guthib.io/about?page=1#top");
 url.updateProtocol("https");
@@ -98,11 +90,12 @@ Webclient
 ———————————————————————————————————————————————————————————————— 
 */
 
-import Webclient from "./typescript/backend/_common/classes/webclient.js";
-import parseDuration from "./typescript/backend/_common/helpers/parseDuration.js";
-
 // Recommended to export with the server managing databases
-const wc = new Webclient(config.crawler, db.metadata);
+const wc = new Webclient({ 
+    crawler: config.crawler, 
+    database: db.metadata,
+    useSecureSSL: config.isProduction
+});
 
 log.network.info(await wc.getMetadata(url.href));
 
@@ -125,14 +118,12 @@ I18n
 ———————————————————————————————————————————————————————————————— 
 */
 
-import I18nService from "./typescript/backend/_common/services/i18n.service.js";
+// const i18n = await I18nService.load(
+//     { 
+//         localesPath: "/public/locales", 
+//         locale: "en", 
+//        defaultLocale: config.metadata.locale 
+//     }
+// );
 
-const i18n = await I18nService.load(
-    { 
-        localesPath: "/public/locales", 
-        locale: "en", 
-        defaultLocale: config.metadata.locale 
-    }
-);
-
-log.i18n.info(i18n.t("maintenance.reason"))
+// log.i18n.info(i18n.t("maintenance.reason"))

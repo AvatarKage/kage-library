@@ -11,8 +11,13 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import robotsParser from "robots-parser";
 
-import { config } from "../../../../app.config.js";
 import { DB } from "../types/database.type.js";
+
+type WebClient = {
+    crawler: CrawlerConfig, 
+    database?: DB
+    useSecureSSL?: boolean
+};
 
 type CrawlerConfig = {
     name: string;
@@ -38,15 +43,16 @@ export interface Metadata {
  * A metadata table will be created in the database.
  * 
  * @example
- * const wc = new Webclient(
- *     {
+ * const wc = new Webclient({
+ *     crawler: {
  *         name: "ExampleCrawler",
  *         version: "1.0",
  *         website: "https://example.com",
  *         contact: "admin@example.com"
  *     },
- *     db.metadata
- * );
+ *     database: db.metadata,
+ *     useSecureSSL: true
+ * });
  *
  * const meta = await wc.getMetadata("https://example.com");
  * const html = await wc.crawl("https://example.com");
@@ -55,10 +61,12 @@ export interface Metadata {
 export default class Webclient {
     private crawler: CrawlerConfig;
     private database: DB | undefined;
+    private useSecureSSL: boolean;
 
-    constructor(crawler: CrawlerConfig, database?: DB) {
+    constructor({ crawler, database, useSecureSSL }: WebClient) {
         this.crawler = crawler
         this.database = database ?? undefined;
+        this.useSecureSSL = useSecureSSL ?? true;
     }
 
     private getUserAgent() {
@@ -83,7 +91,7 @@ export default class Webclient {
         }
 
         const httpsAgent = new https.Agent({
-            rejectUnauthorized: config.isProduction
+            rejectUnauthorized: this.useSecureSSL
         });
 
         try {
@@ -199,7 +207,7 @@ export default class Webclient {
         if (!this.isAllowed(url)) return;
 
         const httpsAgent = new https.Agent({
-            rejectUnauthorized: config.isProduction
+            rejectUnauthorized: this.useSecureSSL
         });
 
         try {
@@ -309,7 +317,7 @@ export default class Webclient {
         if (!this.isAllowed(url)) return;
 
         const httpsAgent = new https.Agent({
-            rejectUnauthorized: config.isProduction
+            rejectUnauthorized: this.useSecureSSL
         });
 
         try {
@@ -372,7 +380,7 @@ export default class Webclient {
         if (!this.isAllowed(url)) throw new Error("Crawler is not allowed to crawl:" + url);
 
         const httpsAgent = new https.Agent({
-            rejectUnauthorized: config.isProduction
+            rejectUnauthorized: this.useSecureSSL
         });
 
         try {
@@ -419,7 +427,7 @@ export default class Webclient {
             const robotsUrl = `${parsedUrl.protocol}//${parsedUrl.host}/robots.txt`;
 
             const httpsAgent = new https.Agent({
-                rejectUnauthorized: config.isProduction
+                rejectUnauthorized: this.useSecureSSL
             });
 
             const response = await axios.get(robotsUrl, {

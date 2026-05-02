@@ -43,7 +43,7 @@ const numToWord: Record<string, string> = Object.fromEntries(
  * convertNumber("I have 1 apple", "words")
  * // "I have one apple"
  */
-export function convertNumber(text: string, format: Format): string {
+export default function convertNumber(text: string, format: Format): string {
     if (format === "numbers") {
         const pattern = new RegExp(`\\b(${Object.keys(wordToNum).join("|")})\\b`, "gi");
 
