@@ -1,9 +1,10 @@
 {
   "name": "kage-library",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "dev": "tsx dev.test.ts",
     "test": "tsx main.test.ts",
     "publish:npm": "cd packages/node && npm publish && cd ../../",
     "build": "tsx dev/node/build.mts",

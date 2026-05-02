@@ -249,6 +249,7 @@ export default class Logger {
     }
 
     private formatArg(arg: unknown, depth = 0): string {
+        const inspectSym = Symbol.for("nodejs.util.inspect.custom");
         const indent = (lvl: number) => "    ".repeat(lvl);
 
         if (typeof arg === "string") return arg;
@@ -293,7 +294,7 @@ export default class Logger {
                 .join("\n")}\n${indent(depth)}]`;
         }
 
-        if (typeof arg === "object" && arg !== null) {
+       if (typeof arg === "object" && arg !== null) {
             if (arg instanceof Date) {
                 return chalk.magenta(arg.toISOString());
             }
@@ -302,13 +303,25 @@ export default class Logger {
                 return chalk.magenta(arg.toISO());
             }
 
+            if (typeof (arg as any)[inspectSym] === "function") {
+                return this.formatArg((arg as any)[inspectSym](), depth);
+            }
+
+            if (typeof (arg as any).toJSON === "function") {
+                return this.formatArg((arg as any).toJSON(), depth);
+            }
+
             const entries = Object.entries(arg as Record<string, unknown>);
 
             if (entries.length === 0) return "{}";
 
             return `{\n${entries
                 .map(([k, v]) =>
-                    `${indent(depth + 1)}${k}: ${typeof v === "string" ? `"${v}"` : this.formatArg(v, depth + 1)}`
+                    `${indent(depth + 1)}${k}: ${
+                        typeof v === "string"
+                            ? `"${v}"`
+                            : this.formatArg(v, depth + 1)
+                    }`
                 )
                 .join("\n")}\n${indent(depth)}}`;
         }
