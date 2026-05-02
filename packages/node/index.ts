@@ -5,7 +5,6 @@ import Logger from "./src/classes/logger.js";
 import Snowflake from "./src/classes/snowflake.js";
 import URL from "./src/classes/url.js";
 import WebClient from "./src/classes/webClient.js";
-import WsClient from "./src/classes/wsClient.js";
 
 // Helpers
 import cleanJSON from "./src/helpers/cleanJSON.js";
@@ -28,7 +27,6 @@ export {
     Snowflake,
     URL,
     WebClient,
-    WsClient,
 
     // Helpers
     cleanJSON,
