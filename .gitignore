@@ -17,7 +17,6 @@ roadmap.md
 todo.md
 tsconfig.json
 main.test.ts
-TO_FIX_getEnv.ts
 
 # Extensions
 *.env
