@@ -13,7 +13,7 @@ import robotsParser from "robots-parser";
 
 import { DB } from "../types/database.type.js";
 
-type WebClient = {
+type WC = {
     crawler: CrawlerConfig, 
     database?: DB
     useSecureSSL?: boolean
@@ -43,7 +43,7 @@ export interface Metadata {
  * A metadata table will be created in the database.
  * 
  * @example
- * const wc = new Webclient({
+ * const wc = new WebClient({
  *     crawler: {
  *         name: "ExampleCrawler",
  *         version: "1.0",
@@ -58,12 +58,12 @@ export interface Metadata {
  * const html = await wc.crawl("https://example.com");
  * const api = await wc.callAPI("https://api.example.com/data");
  */
-export default class Webclient {
+export default class WebClient {
     private crawler: CrawlerConfig;
     private database: DB | undefined;
     private useSecureSSL: boolean;
 
-    constructor({ crawler, database, useSecureSSL }: WebClient) {
+    constructor({ crawler, database, useSecureSSL }: WC) {
         this.crawler = crawler
         this.database = database ?? undefined;
         this.useSecureSSL = useSecureSSL ?? true;

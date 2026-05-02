@@ -4,7 +4,7 @@ import Identifier from "./src/classes/identifier.js";
 import Logger from "./src/classes/logger.js";
 import Snowflake from "./src/classes/snowflake.js";
 import URL from "./src/classes/url.js";
-import Webclient from "./src/classes/webclient.js";
+import WebClient from "./src/classes/webClient.js";
 import WsClient from "./src/classes/wsClient.js";
 
 // Helpers
@@ -27,7 +27,7 @@ export {
     Logger,
     Snowflake,
     URL,
-    Webclient,
+    WebClient,
     WsClient,
 
     // Helpers

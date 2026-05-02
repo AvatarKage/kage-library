@@ -5,7 +5,7 @@ import {
     Logger,
     Snowflake,
     URL,
-    Webclient,
+    WebClient,
     // WsClient (FRONTEND-ONLY),
 
     // Helpers
@@ -106,12 +106,12 @@ log.network.info(url);
 
 /* 
 ————————————————————————————————————————————————————————————————
-Webclient
+WebClient
 ———————————————————————————————————————————————————————————————— 
 */
 
 // Recommended to export with the server managing databases
-const wc = new Webclient({ 
+const wc = new WebClient({ 
     crawler: {
         name: "Example",
         version: "1.0",
