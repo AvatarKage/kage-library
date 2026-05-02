@@ -13,7 +13,6 @@ import formatNumber from "./src/helpers/formatNumber.js";
 import getReqUrl from "./src/helpers/getReqUrl.js";
 import pad from "./src/helpers/pad.js";
 import parseDuration from "./src/helpers/parseDuration.js";
-import shutdownServer from "./src/helpers/shutdownServer.js";
 
 // Services
 import backupService from "./src/services/backup.service.js";
@@ -35,7 +34,6 @@ export {
     getReqUrl,
     pad,
     parseDuration,
-    shutdownServer,
 
     // Services
     backupService,
