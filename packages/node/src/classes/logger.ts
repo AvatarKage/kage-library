@@ -121,8 +121,9 @@ export default class Logger {
     msg: any;
     mic: any;
     webhook: any;
-    discord: any
-    search: any
+    discord: any;
+    search: any;
+    element: any;
     
     public constructor({
         path,
@@ -201,6 +202,7 @@ export default class Logger {
         cache: { info: "", warn: "", error: "", debug: "" },
         worker: { info: "󰆍", warn: "󰆍", error: "󰆍", debug: "󰆍" },
         cron: { info: "󰓦", warn: "󰓦", error: "󰓦", debug: "󰓦" },
+        element: { info: "", warn: "", error: "", debug: "" },
 
         // Networking
         proxy: { info: "", warn: "", error: "", debug: "" },
