@@ -18,6 +18,9 @@ import parseDuration from "./src/helpers/parseDuration.js";
 import backupService from "./src/services/backup.service.js";
 import I18nService from "./src/services/i18n.service.js";
 
+// Types
+import type { QueryResult, DB } from "./src/types/database.type.js";
+
 export {
     // Classes
     Database,
@@ -37,5 +40,9 @@ export {
 
     // Services
     backupService,
-    I18nService
+    I18nService,
+
+    // Types
+    QueryResult,
+    DB
 }
