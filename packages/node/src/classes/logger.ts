@@ -122,6 +122,7 @@ export default class Logger {
     mic: any;
     webhook: any;
     discord: any
+    search: any
     
     public constructor({
         path,
@@ -222,6 +223,7 @@ export default class Logger {
         scan: { info: "", warn: "", error: "", debug: "" },
         id: { info: "", warn: "", error: "", debug: "" },
         snowflake: { info: "", warn: "", error: "", debug: "" },
+        search: { info: "", warn: "", error: "", debug: "" },
 
         // Communication
         notif: { info: "󱇥", warn: "󰵙", error: "󰂛", debug: "󰂚" },
