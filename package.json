@@ -1,12 +1,12 @@
 {
   "name": "kage-library",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "tsx dev.test.ts",
     "test": "tsx main.test.ts",
-    "publish:npm": "cd packages/node && npm publish && cd ../../",
+    "publish:npm": "npm run build && cd packages/node && npm publish && cd ../../",
     "build": "tsx dev/node/build.mts",
     "backup": "tsx dev/backup.ts",
     "clean": "rimraf packages/node/dist && rimraf logs",
