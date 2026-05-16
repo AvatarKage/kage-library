@@ -79,10 +79,10 @@ export default class Identifier {
             const id = createIdentifier();
 
             this.database.transaction((query) => {
-                if (!query("SELECT * FROM identifiers LIMIT 1").success) { 
+                if (!query("SELECT * FROM ids LIMIT 1").success) { 
                     query(
                         `
-                            CREATE TABLE IF NOT EXISTS identifiers (
+                            CREATE TABLE IF NOT EXISTS ids (
                                 id TEXT PRIMARY KEY NOT NULL,
                                 type TEXT NOT NULL,
                                 date TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
@@ -93,7 +93,7 @@ export default class Identifier {
             });
 
             const res = this.database.query<{ id: string; type: IdentifierType }>(
-                "SELECT 1 FROM identifiers WHERE id = ? AND type = ?", [id, type]
+                "SELECT 1 FROM ids WHERE id = ? AND type = ?", [id, type]
             );
 
             if (!res.success) {
@@ -102,7 +102,7 @@ export default class Identifier {
 
             if (res.rowCount === 0) {
                 const insert = this.database.query(
-                    "INSERT INTO identifiers (id, type) VALUES (?, ?)", [id, type]
+                    "INSERT INTO ids (id, type) VALUES (?, ?)", [id, type]
                 );
 
                 if (!insert.success) {
@@ -126,7 +126,7 @@ export default class Identifier {
      */
     get(id: string): IdentifierType | undefined {
         const res = this.database.query<{ type: IdentifierType }>(
-            "SELECT type FROM identifiers WHERE id = ?", [id]
+            "SELECT type FROM ids WHERE id = ?", [id]
         );
 
         if (!res.success) {
