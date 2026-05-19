@@ -3,6 +3,7 @@ These is a repo containing utilities used across various projects. It is recomme
 ```ts
 import { 
     // Classes
+    // AdvancedError
     Database,
     Identifier,
     Logger,
@@ -32,6 +33,8 @@ import {
     // pad,
     // parseDuration
 } from "kage-library/client";
+
+// throw new AdvancedError({ code: 403 });
 
 /* 
 ————————————————————————————————————————————————————————————————

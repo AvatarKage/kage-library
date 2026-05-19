@@ -1,4 +1,5 @@
 // Classes
+import AdvancedError from "./src/classes/advancedError.js";
 import Database from "./src/classes/database.js";
 import Identifier from "./src/classes/identifier.js";
 import Logger from "./src/classes/logger.js";
@@ -23,6 +24,7 @@ import type { QueryResult, DB } from "./src/types/database.type.js";
 
 export {
     // Classes
+    AdvancedError,
     Database,
     Identifier,
     Logger,
