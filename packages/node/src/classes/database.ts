@@ -107,7 +107,7 @@ export default class Database implements DB {
         } catch (error) {
             return {
                 success: false,
-                error,
+                error: String(error),
             };
         }
     };
