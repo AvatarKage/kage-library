@@ -361,7 +361,7 @@ export default class WebClient {
      * const data = await wc.callAPI("https://api.example.com", {
      *   method: "GET",
      *   auth: "Bearer TOKEN",
-     *   format: "json"
+     *   format: "json",
      *   headers: {
      *       "X-Client-Version": "1.0.0"
      *   }
@@ -373,7 +373,7 @@ export default class WebClient {
             method?: "GET" | "POST" | "PUT" | "DELETE";
             auth?: string;
             format?: "json" | "text" | "binary";
-            data?: unknown;
+            body?: unknown;
             headers?: Record<string, string>;
         }
     ): Promise<T> {
@@ -395,7 +395,7 @@ export default class WebClient {
                     ...(options?.auth ? { Authorization: options.auth } : {}),
                     ...(options?.headers || {})
                 },
-                data: options?.data,
+                data: options?.body,
                 responseType:
                 options?.format === "text"
                     ? "text"
