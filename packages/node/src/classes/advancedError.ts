@@ -6,8 +6,7 @@ https://avatarka.ge/github
 ———————————————————————————————————————————————————————————————— 
 */
 
-type AdvancedErrorOptions = {
-    id: string;
+type Props = {
     code: number;
     message?: string;
     details?: unknown;
@@ -116,7 +115,7 @@ export default class AdvancedError extends Error {
     public readonly code: number;
     public readonly details?: unknown;
 
-    constructor({ code, message, details }: AdvancedErrorOptions) {
+    constructor({ code, message, details }: Props) {
         super(
             message ??
             DefaultErrorMessages[code] ??
