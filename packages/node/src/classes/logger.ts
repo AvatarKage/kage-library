@@ -86,6 +86,7 @@ export default class Logger {
     terminate: any;
 
     // List of log types
+    unknown: any;
     process: any;
     memory: any;
     cpu: any;
@@ -178,7 +179,7 @@ export default class Logger {
 
     // To properly render icons, you need to view this file using a Nerd Font: https://nerdfonts.com
     private icons: Record<string, Record<string, string>> = {
-        default: { info: "", warn: "", error: "", debug: "" },
+        unknown: { info: "", warn: "", error: "", debug: "" },
 
         // System
         process: { info: "", warn: "", error: "", debug: "" },
@@ -351,11 +352,11 @@ export default class Logger {
         const tag = `[${scope.toUpperCase()}]`;
         const color = this.colors[level];
 
-        const scopeIcons = this.icons[scope] ?? this.icons["default"];
+        const scopeIcons = this.icons[scope] ?? this.icons["unknown"];
         const icon =
             scopeIcons[level] ??
-            this.icons["default"][level] ??
-            this.icons["default"].info;
+            this.icons["unknown"][level] ??
+            this.icons["unknown"].info;
 
         const tree =
             `${treeLevel > 1 ? "│ ".repeat(treeLevel - 1) : ""}` +
