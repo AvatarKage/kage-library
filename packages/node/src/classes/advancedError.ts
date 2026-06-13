@@ -111,20 +111,33 @@ const DefaultErrorMessages: Record<number, string> = {
  * }
  */
 export default class AdvancedError extends Error {
-    public code: number;
-    public details?: unknown;
+    public readonly code: number;
+    public readonly details?: unknown;
 
     constructor({ code, message, details }: AdvancedErrorOptions) {
-        const resolvedMessage =
+        super(
             message ??
             DefaultErrorMessages[code] ??
-            "Unknown Error";
+            "Unknown Error"
+        );
 
-        super(resolvedMessage);
-
+        this.name = this.constructor.name;
         this.code = code;
         this.details = details;
 
         Error.captureStackTrace?.(this, this.constructor);
+    }
+
+    toJSON() {
+        return {
+            code: this.code,
+            message: this.message,
+            details: this.details,
+            stack: this.stack,
+        };
+    }
+
+    [Symbol.for("nodejs.util.inspect.custom")]() {
+        return this.toJSON();
     }
 }
