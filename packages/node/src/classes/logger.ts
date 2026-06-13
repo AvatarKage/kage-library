@@ -238,18 +238,23 @@ export default class Logger {
         discord: { info: "", warn: "", error: "", debug: "" }
     }
 
+    private stripAnsi(text: string): string {
+        return text.replace(/\u001B\[[0-9;]*m/g, "");
+    }
+
     private async writeToFile(scope: string, content: string) {
         await this.ready;
         if (!this.fsNode || !this.pathNode || !this.path) return;
 
         const now = DateTime.now();
         const date = now.toFormat("yyyy-MM-dd");
+        const cleanContent = this.stripAnsi(content);
 
         const dir = this.pathNode.join(this.path, scope);
         const file = this.pathNode.join(dir, `${date}.log`);
 
         this.fsNode.mkdirSync(dir, { recursive: true });
-        this.fsNode.appendFileSync(file, content + "\n", "utf-8");
+        this.fsNode.appendFileSync(file, cleanContent + "\n", "utf-8");
     }
 
     private formatArg(arg: unknown, depth = 0): string {
