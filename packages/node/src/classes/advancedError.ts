@@ -7,6 +7,7 @@ https://avatarka.ge/github
 */
 
 type AdvancedErrorOptions = {
+    id: string;
     code: number;
     message?: string;
     details?: unknown;
@@ -111,6 +112,7 @@ const DefaultErrorMessages: Record<number, string> = {
  * }
  */
 export default class AdvancedError extends Error {
+    public readonly id: string;
     public readonly code: number;
     public readonly details?: unknown;
 
@@ -121,6 +123,7 @@ export default class AdvancedError extends Error {
             "Unknown Error"
         );
 
+        this.id = crypto.randomUUID();
         this.name = this.constructor.name;
         this.code = code;
         this.details = details;
@@ -130,6 +133,7 @@ export default class AdvancedError extends Error {
 
     toJSON() {
         return {
+            id: this.id,
             code: this.code,
             message: this.message,
             details: this.details,
