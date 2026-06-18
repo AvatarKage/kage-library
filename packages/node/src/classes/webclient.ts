@@ -86,17 +86,17 @@ export default class WebClient {
      * @returns Object with status info
      */
     async ping(url: string) {
-        if (!this.isAllowed(url)) {
-            return { url, ok: false };
-        }
+        const parsedUrl = new URL(url);
 
         const httpsAgent = new https.Agent({
-            rejectUnauthorized: this.useSecureSSL
+            rejectUnauthorized: false,
+            minVersion: "TLSv1.2",
+            servername: parsedUrl.hostname,
         });
 
-        try {
-            const start = Date.now();
+        const start = Date.now();
 
+        try {
             const response = await axios.get(url, {
                 httpsAgent,
                 headers: {
@@ -104,7 +104,7 @@ export default class WebClient {
                 },
                 timeout: 10000,
                 maxRedirects: 5,
-                validateStatus: () => true
+                validateStatus: () => true,
             });
 
             const latency = Date.now() - start;
@@ -112,14 +112,16 @@ export default class WebClient {
             return {
                 url,
                 ok: response.status >= 200 && response.status < 400,
-                latency
+                latency,
             };
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                throw error;
-            }
+        } catch {
+            const latency = Date.now() - start;
 
-            throw new Error("Unknown error occurred");
+            return {
+                url,
+                ok: false,
+                latency,
+            };
         }
     }
 
