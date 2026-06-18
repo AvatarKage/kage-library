@@ -89,7 +89,7 @@ export default class WebClient {
         const parsedUrl = new URL(url);
 
         const httpsAgent = new https.Agent({
-            rejectUnauthorized: false,
+            rejectUnauthorized: this.useSecureSSL,
             minVersion: "TLSv1.2",
             servername: parsedUrl.hostname,
         });
