@@ -9,6 +9,8 @@ https://avatarka.ge/github
 import { DateTime } from "luxon";
 import chalk from "chalk";
 
+import AdvancedError from "./advancedError.js";
+
 type LoggerOptions = {
     path?: string;
     useNerdFonts?: boolean;
@@ -296,9 +298,18 @@ export default class Logger {
                 .join("\n")}\n${indent(depth)}}`;
         }
 
+        if (arg instanceof AdvancedError) {
+            return this.formatArg({
+                id: arg.id,
+                code: arg.code,
+                message: arg.message,
+                details: arg.details,
+                stack: arg.stack,
+            }, depth);
+        };
+
         if (arg instanceof Error) {
             return this.formatArg({
-                name: arg.name,
                 message: arg.message,
                 stack: arg.stack
             }, depth);
