@@ -296,6 +296,14 @@ export default class Logger {
                 .join("\n")}\n${indent(depth)}}`;
         }
 
+        if (arg instanceof Error) {
+            return this.formatArg({
+                name: arg.name,
+                message: arg.message,
+                stack: arg.stack
+            }, depth);
+        }
+
         if (Array.isArray(arg)) {
             if (arg.length === 0) return chalk.gray("[]");
 
