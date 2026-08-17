@@ -23,7 +23,7 @@ import { DurationType } from "../types/duration.type.js";
  * - "2h"  -> 7200000
  * - "7d"  -> 604800000
  */
-export default function parseDuration(input: DurationType | string): number {
+export default function parseDuration(input: DurationType): number {
     const match = input.match(/^(\d+)(d|h|m|s)$/i);
 
     if (!match) {
