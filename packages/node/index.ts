@@ -21,6 +21,7 @@ import I18nService from "./src/services/i18n.service.js";
 
 // Types
 import type { QueryResult, DB } from "./src/types/database.type.js";
+import type { DurationType } from "./src/types/duration.type.js";
 
 export {
     // Classes
@@ -46,5 +47,6 @@ export {
 
     // Types
     QueryResult,
-    DB
+    DB,
+    DurationType
 }
