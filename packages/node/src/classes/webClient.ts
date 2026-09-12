@@ -239,13 +239,18 @@ export default class WebClient {
                 }
             });
 
-            const resolveUrl = (relativeOrAbsoluteUrl?: string | null): string | null => {
-                if (!relativeOrAbsoluteUrl) return null;
-                try {
-                    return new URL(relativeOrAbsoluteUrl, url).href;
-                } catch {
-                    return null;
+            const resolveRelativeUrl = (path?: string | null): string | null => {
+                if (!path) return null;
+
+                if (path.startsWith("/")) {
+                    try {
+                        return new URL(path, url).href;
+                    } catch {
+                        return null;
+                    }
                 }
+                
+                return path;
             };
 
             const resolvers: Record<string, () => string | null> = {
@@ -256,7 +261,7 @@ export default class WebClient {
                         $("link[rel='shortcut icon']").attr("href") ||
                         $("link[rel*='icon']").attr("href");
 
-                    return resolveUrl(iconHref) || resolveUrl("/favicon.ico");
+                    return resolveRelativeUrl(iconHref) || resolveRelativeUrl("/favicon.ico");
                 },
 
                 sitename: () => {
@@ -269,10 +274,10 @@ export default class WebClient {
                 },
 
                 title: () => $("h1").first().text().trim() || null,
-                
+
                 image: () => {
                     const imgSrc = $("img").first().attr("src");
-                    return resolveUrl(imgSrc);
+                    return resolveRelativeUrl(imgSrc);
                 }
             };
 
@@ -280,7 +285,7 @@ export default class WebClient {
                 for (const k of keys) {
                     const key = k.toLowerCase();
                     const v = meta[key];
-                    if (v) return resolveUrl(v) || v;
+                    if (v) return resolveRelativeUrl(v);
 
                     if (resolvers[key]) {
                         const resolved = resolvers[key]();
@@ -296,7 +301,7 @@ export default class WebClient {
                 icon: pick("icon") || null,
                 title: pick("og:title", "twitter:title") || $("title").text().trim() || pick("title") || null,
                 description: pick("og:description", "twitter:description", "description") || null,
-                image: resolveUrl(pick("og:image", "twitter:image")) || pick("image") || null,
+                image: pick("og:image", "twitter:image", "image") || null,
                 type: pick("og:type") || null,
                 accent: pick("theme-color") || null,
                 jsonLd: (() => {
