@@ -239,33 +239,64 @@ export default class WebClient {
                 }
             });
 
+            const resolveUrl = (relativeOrAbsoluteUrl?: string | null): string | null => {
+                if (!relativeOrAbsoluteUrl) return null;
+                try {
+                    return new URL(relativeOrAbsoluteUrl, url).href;
+                } catch {
+                    return null;
+                }
+            };
+
             const resolvers: Record<string, () => string | null> = {
-                icon: () =>
-                    $("link[rel='icon']").attr("href") ||
-                    $("link[rel='shortcut icon']").attr("href") ||
-                    $("link[rel*='icon']").attr("href") ||
-                    $("link[rel='apple-touch-icon']").attr("href") ||
-                    null
+                icon: () => {
+                    const iconHref =
+                        $("link[rel='apple-touch-icon']").attr("href") ||
+                        $("link[rel='icon']").attr("href") ||
+                        $("link[rel='shortcut icon']").attr("href") ||
+                        $("link[rel*='icon']").attr("href");
+
+                    return resolveUrl(iconHref) || resolveUrl("/favicon.ico");
+                },
+
+                sitename: () => {
+                    try {
+                        const parsedUrl = new URL(url);
+                        return parsedUrl.hostname.replace(/^www\./, "");
+                    } catch {
+                        return null;
+                    }
+                },
+
+                title: () => $("h1").first().text().trim() || null,
+                
+                image: () => {
+                    const imgSrc = $("img").first().attr("src");
+                    return resolveUrl(imgSrc);
+                }
             };
 
             const pick = (...keys: string[]) => {
                 for (const k of keys) {
                     const key = k.toLowerCase();
                     const v = meta[key];
-                    if (v) return v;
+                    if (v) return resolveUrl(v) || v;
 
-                    if (resolvers[key]) return resolvers[key]();
+                    if (resolvers[key]) {
+                        const resolved = resolvers[key]();
+                        if (resolved) return resolved;
+                    }
                 }
                 return null;
             };
 
             return {
                 url,
-                siteName: pick("og:site_name") || null,
+                siteName: pick("og:site_name", "sitename") || null,
                 icon: pick("icon") || null,
-                title: pick("og:title", "twitter:title") || $("title").text() || null,
+                title: pick("og:title", "twitter:title") || $("title").text().trim() || pick("title") || null,
                 description: pick("og:description", "twitter:description", "description") || null,
-                image: pick("og:image", "twitter:image") || null,
+                image: resolveUrl(pick("og:image", "twitter:image")) || pick("image") || null,
                 type: pick("og:type") || null,
                 accent: pick("theme-color") || null,
                 jsonLd: (() => {
