@@ -1,6 +1,7 @@
 // Classes
 import Logger from "../src/classes/logger.js";
 import URL from "../src/classes/url.js";
+import Snowflake from "../src/classes/snowflake.js";
 
 // Helpers
 import cleanJSON from "../src/helpers/cleanJSON.js";
@@ -13,6 +14,7 @@ export {
     // Classes
     Logger,
     URL,
+    Snowflake,
 
     // Helpers
     cleanJSON,
